@@ -32,6 +32,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function RoomDetails() {
 
   const [data, setData] = useState([]);
+  const [query, setQuery] = useState('');
 
   useEffect(()=>{
     const fetchRooms = async () => {
@@ -46,12 +47,19 @@ export default function RoomDetails() {
     width: '1000px'
   }
 
+  const handleSubmit = async (e) => {
+      e.preventDefault();
+      let res = await axios.get(`http://localhost:8000/roomDetails/${query}`);
+      setData([]);
+      setData(res.data);
+  }
+
 
   return (
     <TableContainer className="d-flex justify-content-center flex-column align-items-center pt-5">
         <nav className="navbar navbar-dark bg-dark pb-0 my-0" style={searchBarStyle}>
-            <form className="form-inline">
-            <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"></input>
+            <form className="form-inline" onSubmit={handleSubmit}>
+            <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" value={query} onChange={(e)=>setQuery(e.target.value)}></input>
             <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
         </nav>

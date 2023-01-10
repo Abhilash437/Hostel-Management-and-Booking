@@ -36,23 +36,35 @@ export default function StudentDetails() {
 
   useEffect(()=>{
     const fetchStudents = async () => {
-      const res = await axios.get(`http://localhost:8000/studentDetails?q='${query}'`);
+      const res = await axios.get(`http://localhost:8000/studentDetails`);
       setData(res.data);
       console.log(res.data[0]);
     }
     fetchStudents();
-  },[query]);
+  },[]);
 
   const searchBarStyle = {
     width: '1000px'
   }
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(query);
+    setData([]);
+    const res = await axios.get(`http://localhost:8000/studentDetails/'${query}'`);
+    setData(res.data);
+    console.log(res.data);
+  }
+
   return (
     <TableContainer className="d-flex justify-content-center flex-column align-items-center pt-5">
       <nav className="navbar navbar-dark bg-dark pb-0 my-0" style={searchBarStyle}>
+        <form onSubmit={handleSubmit}>
         <div className="form-inline">
-          <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" onChange={(e) => setQuery(e.target.value)}></input>
+          <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" value={query} onChange={(e) => setQuery(e.target.value)}></input>
+          <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </div>
+        </form>
       </nav>
       <Table sx={{ maxWidth: 1000 }} aria-label="customized table" className='border rounded'>
         <TableHead>

@@ -114,6 +114,14 @@ export default function AddRoom() {
                 onChange={(e)=>setprice(e.target.value)}
                 autoComplete=""
               />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="image"
+                type="file"
+                autoComplete=""
+              />
               <Button
                 type="submit"
                 fullWidth

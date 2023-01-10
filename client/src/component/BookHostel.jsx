@@ -1,4 +1,4 @@
-import {React, useState}from 'react';
+import {React, useState, useEffect, useHistory}from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -51,6 +51,7 @@ export default function BookHostel() {
 
 
   return (
+    <>
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
@@ -145,5 +146,6 @@ export default function BookHostel() {
         </Grid>
       </Grid>
     </ThemeProvider>
+    </>
   );
 }

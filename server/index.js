@@ -337,33 +337,30 @@ app.post("/bookHostel",(req,res)=>{
 
 
 app.get("/studentDetails",(req,res)=>{
-    var ql = req.query.q;
-    // console.log(q);
-    let q = ql;
-    const keys = ['studentName'];
     
     let sql = `select s.usn, s.studentName, s.branch, s.semester, r.roomNo, h.bookingDate from students s, rooms r, hostelBooking h where r.roomNo = h.roomId and s.usn = h.usn`;
     db.query(sql,(err,result)=>{
         if(err){
             console.log(err);
         }else{
-            // console.log(result);
-            const search = (data) => {
-                return data.filter((item)=>{
-                    //console.log(ql);
-                    // console.log(typeof ql);
-                    // console.log(item.studentName.includes(ql))
-                    return item.studentName;
-                }
-                    
-                )
-            }
-            console.log(search(result));
-            // console.log(search(result));
             res.send(result);
         }
     })
 });
+
+app.get("/studentDetails/:name",(req,res)=>{
+    let Name = req.params.name;
+    //console.log(studentName);
+    let sql = `select s.usn, s.studentName, s.branch, s.semester, r.roomNo, h.bookingDate from students s, rooms r, hostelBooking h where r.roomNo = h.roomId and s.usn = h.usn and studentName = ${Name} `;
+    db.query(sql,(err,result)=>{
+        if(err){
+            console.log(err);
+        }else{
+            console.log(result);
+            res.send(result);
+        }
+    })
+})
 
 app.get("/roomDetails",(req,res)=>{
     // let sql = `select r.roomNo, r.noOccupants, r.price, r.bookingStatus from rooms r`;
@@ -379,7 +376,18 @@ app.get("/roomDetails",(req,res)=>{
 });
 
 app.get("/roomDetails/:roomNo",(req,res)=>{
-
+    let roomId = req.params.roomNo;
+    console.log(roomId);
+    //console.log(studentName);
+    let sql = `select h.roomId, count(h.usn) as currOccupants, r.noOccupants, r.price, r.bookingStatus from rooms r, hostelBooking h where r.roomNo = h.roomId and r.roomNo = ${roomId} group by h.roomId`;
+    db.query(sql,(err,result)=>{
+        if(err){
+            console.log(err);
+        }else{
+            console.log(result);
+            res.send(result);
+        }
+    })
 });
 
 
