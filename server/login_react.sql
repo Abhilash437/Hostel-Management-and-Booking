@@ -26,8 +26,9 @@ SET time_zone = "+00:00";
 --
 -- Table structure for table `users`
 --
+DROP TABLE `admin`;
 
-CREATE TABLE `users` (
+CREATE TABLE `admin` (
   `id` int(3) NOT NULL,
   `email` varchar(500) NOT NULL,
   `password` varchar(255) NOT NULL,
@@ -38,16 +39,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `password`, `date`) VALUES
-(1, 'somu@gmail.com', '$2b$10$xY6mo4clHl8tHxZ12F3xf.i8CmqNsFUEkxXdCBTzzQWWDEwiY4yfS', '2021-06-26 11:37:39'),
-(2, 'somuu@gmail.com', '$2b$10$GVcA24UNAJlV3dU5zgFCRuU4s9bn0nUhaYVZRu.JVziZ3VgmRzAsu', '2021-06-26 11:38:13'),
-(3, 'ram@gmail.com', '$2b$10$0bp6mwJ2aJnTh3LuGpJtTuMSVqw1WNQJbK7EL6A8R59.OPPGJqgc2', '2021-06-26 11:46:15'),
-(4, 'atanuj383@gmail.com', '$2b$10$NN2z7zs6loysoI8OEda1xelBhuM6Crrh/woHyYHzLJeE9i3Uir//6', '2021-06-26 12:22:18'),
-(5, 'atanuj5@gmail.com', '$2b$10$fKTJbChGRpZLgRkXS6moA.zQATJ8jVoBU66wV57vkeE36qfGetLdG', '2021-06-26 12:27:05'),
-(6, 'atanuj55@gmail.com', '$2b$10$nnbEitRzcfPwd28a7XGc8e00Zvm38sob6I8Bv8nyxOVeV4ccUA53G', '2021-06-26 12:27:55'),
-(7, 'rajuahamed.kh@gmail.com', '$2b$10$pDrNNqqSNibwoH/1fPW9t.9LUgbY28kge4FLcH0BYKhscvTDFUAum', '2021-06-26 14:45:36'),
-(8, 'kkk@gmail.com', '$2b$10$WvfdXiguQbF8zoSfXy7qGeneV0XGSdgIMGriRppaJgi.vQjfiwMhi', '2021-06-26 15:02:13'),
-(9, 'samrat1@gmail.com', '$2b$10$dXEjGzCNaPlRybHMRnK06.cbwnA6vTkSjld2q9xKLbDGZEilP7QFq', '2021-06-26 17:45:07');
+INSERT INTO `admin` (`id`, `email`, `password`, `date`) VALUES
+(1,'abhilashhathwar20@gmail.com','$2a$12$KZF2EK6kJOUo3YQUtUQAj.KNNnt4b0rz7vpdfo/gA3LRbRYl9AhmK','2023-01-07 09:51:38');
 
 --
 -- Indexes for dumped tables
@@ -56,7 +49,7 @@ INSERT INTO `users` (`id`, `email`, `password`, `date`) VALUES
 --
 -- Indexes for table `users`
 --
-ALTER TABLE `users`
+ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -66,10 +59,58 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for table `users`
 --
-ALTER TABLE `users`
+ALTER TABLE `admin`
   MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+DROP TABLE `students`;
+
+CREATE TABLE `students` (
+  usn varchar(20) NOT NULL,
+  studentName varchar(100) NOT NULL,
+  studentEmail varchar(100) NOT NULL,
+  branch varchar(100) NOT NULL,
+  semester varchar(100) NOT NULL,
+  studentAddress varchar(500) NOT NULL,
+  phoneNo varchar(20) NOT NULL,
+  aadhar varchar(20) NOT NULL,
+  guardianName varchar(100) NOT NULL, 
+  guardianPhno varchar(20) NOT NULL
+);
+
+ALTER TABLE `students`
+  ADD PRIMARY KEY (`usn`);
+
+
+DROP TABLE `rooms`;
+
+CREATE TABLE `rooms` (
+  noOccupants int NOT NULL,
+  roomNo int NOT NULL,
+  bookingStatus BIT DEFAULT NULL,
+  price bigint NOT NULL
+);
+
+ALTER TABLE `rooms`
+  ADD PRIMARY KEY (`roomNo`);
+
+
+DROP TABLE `hostelBooking`;
+
+CREATE TABLE `hostelBooking` (
+  roomId int NOT NULL,
+  usn varchar(100) NOT NULL,
+  bookingDate date NOT NULL,
+  utrNo varchar(100) NOT NULL,
+  FOREIGN KEY(usn) REFERENCES students(usn) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY(roomId) REFERENCES rooms(roomNo) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+ALTER TABLE `hostelBooking`
+  ADD PRIMARY KEY (`roomId`,`usn`);
+
+COMMIT;

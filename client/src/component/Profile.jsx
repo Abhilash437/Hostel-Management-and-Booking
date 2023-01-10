@@ -35,7 +35,7 @@ const his=useHistory();
     }}>
      <div className="box">
       
-      <h1>WELCOME TO REACT PROFILE</h1>
+      <h1>WELCOME TO HOSTEL MANAGEMENT</h1>
       <p>
         {
           login ? email :null

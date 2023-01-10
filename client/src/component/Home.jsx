@@ -11,7 +11,7 @@ const Home = () => {
     }}>
      <div className="box">
       
-      <h1>WELCOME TO REACT PROJECT</h1>
+      <h1>WELCOME TO HOSTEL MANAGEMENT</h1>
       <NavLink to="/profile" className="btn btn-warning">Get Started</NavLink>
      </div>
       
