@@ -87,6 +87,9 @@ const Navbar = () => {
       <li className="nav-item">
         <NavLink to="/addStaff" className="nav-link text-white" >Add Staff </NavLink>
       </li>
+      <li className="nav-item">
+        <NavLink to="/addMess" className="nav-link text-white" >Add Mess </NavLink>
+      </li>
       <li className="nav-item dropdown">
         <a className="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Student Details
@@ -115,6 +118,16 @@ const Navbar = () => {
           <NavLink to="/staffDetails" className="dropdown-item">View Staff Details </NavLink>
           <NavLink to="/updateStaff" className="dropdown-item">Update Staff Details </NavLink>
           <NavLink to="/deleteStaff" className="dropdown-item">Delete Staff Details </NavLink>
+        </div>
+      </li>
+      <li className="nav-item dropdown">
+        <a className="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Mess Details
+        </a>
+        <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <NavLink to="/MessDetails" className="dropdown-item">View Mess Details </NavLink>
+          <NavLink to="/updateMess" className="dropdown-item">Update Mess Details </NavLink>
+          <NavLink to="/deleteMess" className="dropdown-item">Delete Mess Details </NavLink>
         </div>
       </li>
       <li className="nav-item">

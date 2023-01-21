@@ -615,6 +615,127 @@ app.post('/deleteStaff',(req,res)=>{
     
 });
 
+app.post("/addMess",(req,res)=>{
+    const weekDay = req.body.weekDay;
+    const breakfast = req.body.breakfast;
+    const lunch = req.body.lunch;
+    const snacks = req.body.snacks;
+    const dinner = req.body.dinner;
+    const price = req.body.price;
+
+
+    const data = {
+        weekDay:weekDay,
+        breakfast:breakfast,
+        lunch:lunch,
+        snacks:snacks,
+        dinner:dinner,
+        price:price
+    }
+
+    console.log(data);
+
+    let sql = `select * from mess where weekDay = '${weekDay}'`;
+
+    db.query(sql,(err,result)=>{
+        if(err){
+            console.log(err);
+        }else{
+            if(result.length!=0){
+                res.send({message:"Day already exists"});
+            }else{
+                let insert = "INSERT INTO `mess` SET ?";
+                db.query(insert,data,(err,result)=>{
+                    if(err){
+                        console.log(err);
+                    }else{
+                        res.send(result);
+                    }
+                })
+            }
+        }
+    })
+
+    
+});
+
+app.get("/messDetails",(req,res)=>{
+    
+    let sql = `select weekDay, breakfast, lunch, snacks, dinner, price from mess`;
+    db.query(sql,(err,result)=>{
+        if(err){
+            console.log(err);
+        }else{
+            res.send(result);
+        }
+    })
+});
+
+app.get("/MessDetails/:name",(req,res)=>{
+    let Name = req.params.name;
+    let sql = `select weekDay, breakfast, lunch, snacks, dinner, price from mess where weekDay = ${Name}`;
+    db.query(sql,(err,result)=>{
+        if(err){
+            console.log(err);
+        }else{
+            console.log(result);
+            res.send(result);
+        }
+    })
+});
+
+
+app.post('/updateMess',(req,res)=>{
+    const weekDay = req.body.weekDay;
+    const updateField = req.body.updatefield;
+    const updateValue = req.body.updatevalue;
+
+    let sql = `select * from mess where weekDay = "${weekDay}"`;
+    db.query(sql,(err,result)=>{
+        if(!err){
+            if(result.length!=0){
+                let update = `update mess set ${updateField} = "${updateValue}" where weekDay = "${weekDay}"`;
+                db.query(update,(err,updateRes)=>{
+                    if(!err){
+                        console.log("Success")
+                    }else{
+                        console.log(err);
+                    }
+                });
+            }else{
+                console.log("Day does not exists");
+            }
+        }else{
+            console.log(err);
+        }
+    })
+});
+
+app.post('/deleteMess',(req,res)=>{
+    const weekDay = req.body.weekDay;
+
+    let sql = `select * from mess where weekDay = "${weekDay}"`;
+    db.query(sql,(err,result)=>{
+        if(!err){
+            if(result.length != 0){
+                let Delete = `delete from mess where weekDay = "${weekDay}"`;
+                db.query(Delete,(err, updateRes) => {
+                    if(!err){
+                        console.log("Success");
+                    }else{
+                        console.log(err);
+                    }
+                })
+            }else{
+                console.log("Day does not exists");
+            }
+        }else{
+            console.log(err);
+        }
+    })
+    
+});
+
 
 
 app.listen(PORT,()=>{

@@ -19,6 +19,10 @@ import AddStaff from './component/AddStaff';
 import StaffDetails from './component/StaffDetails';
 import UpdateStaffs from './component/UpdateStaffs';
 import DeleteStaffs from './component/DeleteStaffs';
+import AddMessDets from './component/AddMessDets';
+import UpdateMessDets from './component/UpdateMessDets';
+import MessDets from './component/MessDets';
+import DeleteMessDets from './component/DeleteMessDets';
 
 const App = () => {
   return (
@@ -42,6 +46,10 @@ const App = () => {
       <Route exact path = "/staffDetails" component={StaffDetails}/>
       <Route exact path = "/updateStaff" component={UpdateStaffs}/>
       <Route exact path = "/deleteStaff" component={DeleteStaffs}/>
+      <Route exact path = "/addMess" component={AddMessDets}/>
+      <Route exact path = "/updateMess" component={UpdateMessDets}/>
+      <Route exact path = "/messDetails" component={MessDets}/>
+      <Route exact path = "/deleteMess" component={DeleteMessDets}/>
     </Switch>
      
 

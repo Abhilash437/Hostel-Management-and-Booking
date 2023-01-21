@@ -29,18 +29,18 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function RoomDetails() {
+export default function MessDets() {
 
   const [data, setData] = useState([]);
   const [query, setQuery] = useState('');
 
   useEffect(()=>{
-    const fetchRooms = async () => {
-      const res = await axios.get("http://localhost:8000/roomDetails");
+    const fetchStudents = async () => {
+      const res = await axios.get(`http://localhost:8000/MessDetails`);
       setData(res.data);
-      console.log(res.data);
+      console.log(res.data[0]);
     }
-    fetchRooms();
+    fetchStudents();
   },[]);
 
   const searchBarStyle = {
@@ -48,42 +48,46 @@ export default function RoomDetails() {
   }
 
   const handleSubmit = async (e) => {
-      e.preventDefault();
-      let res = await axios.get(`http://localhost:8000/roomDetails/${query}`);
-      setData([]);
-      setData(res.data);
+    e.preventDefault();
+    console.log(query);
+    setData([]);
+    const res = await axios.get(`http://localhost:8000/MessDetails/'${query}'`);
+    setData(res.data);
+    console.log(res.data);
   }
-
 
   return (
     <TableContainer className="d-flex justify-content-center flex-column align-items-center pt-5">
-        <nav className="navbar navbar-dark bg-dark pb-0 my-0" style={searchBarStyle}>
-            <form className="form-inline" onSubmit={handleSubmit}>
-            <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" value={query} onChange={(e)=>setQuery(e.target.value)}></input>
-            <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-        </nav>
+      <nav className="navbar navbar-dark bg-dark pb-0 my-0" style={searchBarStyle}>
+        <form onSubmit={handleSubmit}>
+        <div className="form-inline">
+          <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" value={query} onChange={(e) => setQuery(e.target.value)}></input>
+          <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </div>
+        </form>
+      </nav>
       <Table sx={{ maxWidth: 1000 }} aria-label="customized table" className='border rounded'>
         <TableHead>
           <TableRow>
-            <StyledTableCell>Room Number</StyledTableCell>
-            <StyledTableCell align="right">Current occupants</StyledTableCell>
-            <StyledTableCell align="right">Number of occupants</StyledTableCell>
+            <StyledTableCell>Day</StyledTableCell>
+            <StyledTableCell align="right">Breakfast</StyledTableCell>
+            <StyledTableCell align="right">Lunch&nbsp;</StyledTableCell>
+            <StyledTableCell align="right">Snacks&nbsp;</StyledTableCell>
+            <StyledTableCell align="right">Dinner&nbsp;</StyledTableCell>
             <StyledTableCell align="right">Price&nbsp;</StyledTableCell>
-            <StyledTableCell align="right">Booking status&nbsp;</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {data.map((row) => (
-            <StyledTableRow key={row.name}>
+            <StyledTableRow key={row.weekDay}>
               <StyledTableCell component="th" scope="row">
-                {row.roomId}
+                {row.weekDay}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.currOccupants}</StyledTableCell>
-              <StyledTableCell align="right">{row.noOccupants}</StyledTableCell>
+              <StyledTableCell align="right">{row.breakfast}</StyledTableCell>
+              <StyledTableCell align="right">{row.lunch}</StyledTableCell>
+              <StyledTableCell align="right">{row.snacks}</StyledTableCell>
+              <StyledTableCell align="right">{row.dinner}</StyledTableCell>
               <StyledTableCell align="right">₹{row.price}</StyledTableCell>
-              {/* <StyledTableCell align="right">{row.bookingStatus}</StyledTableCell> */}
-              {row.currOccupants < row.noOccupants? <StyledTableCell align="right" width="150px" className="badge badge-success text-center">Available</StyledTableCell> : <StyledTableCell align="right" className="badge badge-danger text-center">Booked</StyledTableCell>}
             </StyledTableRow>
           ))}
         </TableBody>

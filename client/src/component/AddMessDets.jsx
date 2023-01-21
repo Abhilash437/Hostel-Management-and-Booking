@@ -24,26 +24,26 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function AddStaff() {
+export default function AddMessDets() {
 
-    const [staffId, setstaffId] = useState("");
-    const [staffName, setstaffName] = useState("");
-    const [staffType, setstaffType] = useState("");
-    const [staffPhNo, setstaffPhNo] = useState("");
-    const [staffAddress, setstaffAddress] = useState("");
-    const [staffSalaryPerMonth, setstaffSalaryPerMonth] = useState(0);
+    const [weekDay, setweekDay] = useState("");
+    const [breakfast, setBreakfast] = useState("");
+    const [lunch, setlunch] = useState("");
+    const [snacks, setsnacks] = useState("");
+    const [dinner, setdinner] = useState("");
+    const [price, setprice] = useState(0);
     
   const handleSubmit = async (event) => {
     event.preventDefault();
     
     try{
-        let res = await axios.post("http://localhost:8000/addStaff",{
-            staffId:staffId,
-            staffName:staffName,
-            staffType: staffType,
-            staffPhNo: staffPhNo,
-            staffAddress: staffAddress,
-            staffSalaryPerMonth:staffSalaryPerMonth
+        let res = await axios.post("http://localhost:8000/addMess",{
+            weekDay:weekDay,
+            breakfast:breakfast,
+            lunch:lunch,
+            snacks:snacks,
+            dinner:dinner,
+            price:price
         });
         console.log(res);
     }catch(err){
@@ -83,84 +83,83 @@ export default function AddStaff() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Add Staff
+              Add Mess Details
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                id="staffId"
-                label="Staff Id"
-                name="staffId"
-                value={staffId}
-                onChange={(e)=>setstaffId(e.target.value)}
-                autoComplete="Staff Id"
+                id="weekDay"
+                label="Day"
+                name="weekDay"
+                value={weekDay}
+                onChange={(e)=>setweekDay(e.target.value)}
+                autoComplete="Day"
                 autoFocus
               />
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                name="staffName"
-                label="Staff Name"
-                id="staffName"
-                value={staffName}
-                onChange={(e)=>setstaffName(e.target.value)}
+                name="breakfast"
+                label="Breakfast"
+                id="breakfast"
+                value={breakfast}
+                onChange={(e)=>setBreakfast(e.target.value)}
                 autoComplete=""
               />
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                name="staffType"
-                label="Staff Type"
-                id="staffType"
-                value={staffType}
-                onChange={(e)=>setstaffType(e.target.value)}
+                name="lunch"
+                label="Lunch"
+                id="lunch"
+                value={lunch}
+                onChange={(e)=>setlunch(e.target.value)}
                 autoComplete=""
               />
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                name="staffPhNo"
-                label="Staff Phone Number"
-                id="staffPhNo"
-                value={staffPhNo}
-                onChange={(e)=>setstaffPhNo(e.target.value)}
+                name="snacks"
+                label="Snacks"
+                id="snacks"
+                value={snacks}
+                onChange={(e)=>setsnacks(e.target.value)}
                 autoComplete=""
               />
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                name="staffAddress"
-                label="Address"
-                id="staffAddress"
-                value={staffAddress}
-                onChange={(e)=>setstaffAddress(e.target.value)}
+                name="dinner"
+                label="Dinner"
+                id="dinner"
+                value={dinner}
+                onChange={(e)=>setdinner(e.target.value)}
                 autoComplete=""
               />
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                name="staffSalaryPerMonth"
-                label="Staff Salary Per Month"
-                id="staffSalaryPerMonth"
-                value={staffSalaryPerMonth}
-                onChange={(e)=>setstaffSalaryPerMonth(e.target.value)}
+                name="price"
+                label="Price per day"
+                id="price"
+                value={price}
+                onChange={(e)=>setprice(e.target.value)}
                 autoComplete=""
               />
-              
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Add Staff
+                Add Mess Details
               </Button>
               <Copyright sx={{ mt: 5 }} />
             </Box>
