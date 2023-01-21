@@ -2,8 +2,8 @@ const express =require('express');
 const mysql=require('mysql2');
 const cors = require("cors");
 const bcrypt = require('bcrypt');
-const bodyParser=require("body-parser");
-const cookieparser=require("cookie-parser")
+const bodyParser= require("body-parser");
+const cookieparser = require("cookie-parser")
 const session=require("express-session");
 const saltRounds = 10;
 
@@ -389,6 +389,32 @@ app.get("/roomDetails/:roomNo",(req,res)=>{
         }
     })
 });
+
+app.post('/updateRoom',(req,res)=>{
+    const roomNo = parseInt(req.body.roomNo);
+    const updateValue = parseInt(req.body.updatevalue);
+    const updateField = req.body.updatefield;
+
+    let sql = `select roomNo from rooms where roomNo = ${roomNo}`;
+    db.query(sql,(err,result)=>{
+        if(!err){
+            if(result.length != 0){
+                let update = `update rooms set ${updateField} = ${updateValue} where roomNo = ${roomNo}`;
+                db.query(update,(err, updateRes) => {
+                    if(!err){
+                        console.log("Success");
+                    }else{
+                        console.log(err);
+                    }
+                })
+            }else{
+                console.log("Room does not exists");
+            }
+        }else{
+            console.log(err);
+        }
+    })
+})
 
 
 
