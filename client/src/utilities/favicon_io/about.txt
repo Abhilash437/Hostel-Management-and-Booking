@@ -1,0 +1,6 @@
+This favicon was generated using the following font:
+
+- Font Title: Moul
+- Font Author: Copyright 2020 The Moul Project Authors (https://github.com/danhhong/Moul)
+- Font Source: http://fonts.gstatic.com/s/moul/v25/nuF2D__FSo_3E-RYiJCy-00.ttf
+- Font License: SIL Open Font License, 1.1 (http://scripts.sil.org/OFL))

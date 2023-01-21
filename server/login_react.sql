@@ -134,8 +134,8 @@ CREATE TABLE `mess` (
   weekDay varchar(20) NOT NULL,
   breakfast varchar(100) NOT NULL,
   lunch varchar(100) NOT NULL,
-  snacks varchar(100) NOT NULL,
-  dinner varchar(100) NOT NULL,
+  snacks varchar(100) DEFAULT NULL,
+  dinner varchar(100) DEFAULT NULL,
   price bigint NOT NULL
 );
 
