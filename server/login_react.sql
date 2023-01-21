@@ -114,3 +114,32 @@ ALTER TABLE `hostelBooking`
   ADD PRIMARY KEY (`roomId`,`usn`);
 
 COMMIT;
+
+
+CREATE TABLE `staffs` (
+  staffId varchar(20) NOT NULL,
+  staffName varchar(20) NOT NULL,
+  staffType varchar(20) NOT NULL,
+  staffPhNo varchar(20) NOT NULL,
+  staffAddress varchar(20) NOT NULL,
+  staffSalaryPerMonth bigint NOT NULL
+);
+
+ALTER TABLE `staffs`
+  ADD PRIMARY KEY (`staffId`);
+
+COMMIT;
+
+CREATE TABLE `mess` (
+  weekDay varchar(20) NOT NULL,
+  breakfast varchar(100) NOT NULL,
+  lunch varchar(100) NOT NULL,
+  snacks varchar(100) NOT NULL,
+  dinner varchar(100) NOT NULL,
+  price bigint NOT NULL
+);
+
+ALTER TABLE `mess`
+  ADD PRIMARY KEY (`weekDay`);
+
+COMMIT;

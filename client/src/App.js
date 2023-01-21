@@ -15,6 +15,10 @@ import DeleteRooms from './component/DeleteRooms';
 import UpdateStudents from './component/UpdateStudents';
 import DeleteStudent from './component/DeleteStudent';
 import './App.css';
+import AddStaff from './component/AddStaff';
+import StaffDetails from './component/StaffDetails';
+import UpdateStaffs from './component/UpdateStaffs';
+import DeleteStaffs from './component/DeleteStaffs';
 
 const App = () => {
   return (
@@ -34,6 +38,10 @@ const App = () => {
       <Route exact path = "/updateStudent" component={UpdateStudents}/>
       <Route exact path = "/deleteStudent" component={DeleteStudent}/>
       <Route exact path = "/deleteRoom" component={DeleteRooms}/>
+      <Route exact path = "/addStaff" component={AddStaff}/>
+      <Route exact path = "/staffDetails" component={StaffDetails}/>
+      <Route exact path = "/updateStaff" component={UpdateStaffs}/>
+      <Route exact path = "/deleteStaff" component={DeleteStaffs}/>
     </Switch>
      
 

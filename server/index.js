@@ -494,6 +494,128 @@ app.post('/deleteStudent',(req,res)=>{
 });
 
 
+app.post("/addStaff",(req,res)=>{
+    const staffId = req.body.staffId;
+    const staffName = req.body.staffName;
+    const staffType = req.body.staffType;
+    const staffPhNo = req.body.staffPhNo;
+    const staffAddress = req.body.staffAddress;
+    const staffSalaryPerMonth = req.body.staffSalaryPerMonth;
+
+
+    const data = {
+        staffId:staffId,
+        staffName:staffName,
+        staffType:staffType,
+        staffPhNo:staffPhNo,
+        staffAddress:staffAddress,
+        staffSalaryPerMonth:staffSalaryPerMonth
+    }
+
+    console.log(data);
+
+    let sql = `select * from staffs where staffId = '${staffId}'`;
+
+    db.query(sql,(err,result)=>{
+        if(err){
+            console.log(err);
+        }else{
+            if(result.length!=0){
+                res.send({message:"Staff already exists"});
+            }else{
+                let insert = "INSERT INTO `staffs` SET ?";
+                db.query(insert,data,(err,result)=>{
+                    if(err){
+                        console.log(err);
+                    }else{
+                        res.send(result);
+                    }
+                })
+            }
+        }
+    })
+
+    
+});
+
+app.get("/staffDetails",(req,res)=>{
+    
+    let sql = `select staffId, staffName, staffType, staffPhNo, staffAddress, staffSalaryPerMonth from staffs`;
+    db.query(sql,(err,result)=>{
+        if(err){
+            console.log(err);
+        }else{
+            res.send(result);
+        }
+    })
+});
+
+app.get("/staffDetails/:name",(req,res)=>{
+    let Name = req.params.name;
+    let sql = `select staffId, staffName, staffType, staffPhNo, staffAddress, staffSalaryPerMonth from staffs where staffName = ${Name}`;
+    db.query(sql,(err,result)=>{
+        if(err){
+            console.log(err);
+        }else{
+            console.log(result);
+            res.send(result);
+        }
+    })
+});
+
+
+app.post('/updateStaff',(req,res)=>{
+    const staffId = req.body.staffId;
+    const updateField = req.body.updatefield;
+    const updateValue = req.body.updatevalue;
+
+    let sql = `select * from staffs where staffId = "${staffId}"`;
+    db.query(sql,(err,result)=>{
+        if(!err){
+            if(result.length!=0){
+                let update = `update staffs set ${updateField} = "${updateValue}" where staffId = "${staffId}"`;
+                db.query(update,(err,updateRes)=>{
+                    if(!err){
+                        console.log("Success")
+                    }else{
+                        console.log(err);
+                    }
+                });
+            }else{
+                console.log("Staff does not exists");
+            }
+        }else{
+            console.log(err);
+        }
+    })
+});
+
+app.post('/deleteStaff',(req,res)=>{
+    const staffId = req.body.staffId;
+
+    let sql = `select * from staffs where staffId = "${staffId}"`;
+    db.query(sql,(err,result)=>{
+        if(!err){
+            if(result.length != 0){
+                let Delete = `delete from staffs where staffId = "${staffId}"`;
+                db.query(Delete,(err, updateRes) => {
+                    if(!err){
+                        console.log("Success");
+                    }else{
+                        console.log(err);
+                    }
+                })
+            }else{
+                console.log("Staff does not exists");
+            }
+        }else{
+            console.log(err);
+        }
+    })
+    
+});
+
+
 
 app.listen(PORT,()=>{
     console.log(`app running in ${PORT}` )
