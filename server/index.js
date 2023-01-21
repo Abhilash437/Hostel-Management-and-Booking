@@ -440,7 +440,58 @@ app.post('/deleteRoom',(req,res)=>{
         }
     })
     
-})
+});
+
+app.post('/updateStudent',(req,res)=>{
+    const usn = req.body.usn;
+    const updateField = req.body.updatefield;
+    const updateValue = req.body.updatevalue;
+
+    let sql = `select * from students where usn = "${usn}"`;
+    db.query(sql,(err,result)=>{
+        if(!err){
+            if(result.length!=0){
+                let update = `update students set ${updateField} = "${updateValue}" where usn = "${usn}"`;
+                db.query(update,(err,updateRes)=>{
+                    if(!err){
+                        console.log("Success")
+                    }else{
+                        console.log(err);
+                    }
+                });
+            }else{
+                console.log("Student does not exists");
+            }
+        }else{
+            console.log(err);
+        }
+    })
+});
+
+app.post('/deleteStudent',(req,res)=>{
+    const usn = req.body.usn;
+
+    let sql = `select usn from students where usn = "${usn}"`;
+    db.query(sql,(err,result)=>{
+        if(!err){
+            if(result.length != 0){
+                let Delete = `delete from students where usn = "${usn}"`;
+                db.query(Delete,(err, updateRes) => {
+                    if(!err){
+                        console.log("Success");
+                    }else{
+                        console.log(err);
+                    }
+                })
+            }else{
+                console.log("Room does not exists");
+            }
+        }else{
+            console.log(err);
+        }
+    })
+    
+});
 
 
 
