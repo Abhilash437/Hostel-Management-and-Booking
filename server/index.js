@@ -417,6 +417,31 @@ app.post('/updateRoom',(req,res)=>{
 })
 
 
+app.post('/deleteRoom',(req,res)=>{
+    const roomNo = parseInt(req.body.roomNo);
+
+    let sql = `select roomNo from rooms where roomNo = ${roomNo}`;
+    db.query(sql,(err,result)=>{
+        if(!err){
+            if(result.length != 0){
+                let Delete = `delete from rooms where roomNo = ${roomNo}`;
+                db.query(Delete,(err, updateRes) => {
+                    if(!err){
+                        console.log("Success");
+                    }else{
+                        console.log(err);
+                    }
+                })
+            }else{
+                console.log("Room does not exists");
+            }
+        }else{
+            console.log(err);
+        }
+    })
+    
+})
+
 
 
 app.listen(PORT,()=>{
