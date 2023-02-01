@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
+import {useHistory} from 'react-router-dom';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -33,11 +34,14 @@ export default function StudentDetails() {
 
   const [data, setData] = useState([]);
   const [query, setQuery] = useState('');
+  const his = useHistory();
 
   useEffect(()=>{
     const fetchStudents = async () => {
       const res = await axios.get(`http://localhost:8000/studentDetails`);
-      setData(res.data);
+      
+        setData(res.data);
+      
       console.log(res.data[0]);
     }
     fetchStudents();

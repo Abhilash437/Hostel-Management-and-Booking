@@ -1,7 +1,10 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
 
+
+
 const Home = () => {
+  
   return (
     <>
     <section style={{
@@ -9,6 +12,7 @@ const Home = () => {
       width:'100%',
       height:'90vh'
     }}>
+      
      <div className="box">
       
       <h1>WELCOME TO HOSTEL MANAGEMENT</h1>

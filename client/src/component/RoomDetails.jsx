@@ -77,7 +77,7 @@ export default function RoomDetails() {
           {data.map((row) => (
             <StyledTableRow key={row.name}>
               <StyledTableCell component="th" scope="row">
-                {row.roomId}
+                {row.roomNo}
               </StyledTableCell>
               <StyledTableCell align="right">{row.currOccupants}</StyledTableCell>
               <StyledTableCell align="right">{row.noOccupants}</StyledTableCell>

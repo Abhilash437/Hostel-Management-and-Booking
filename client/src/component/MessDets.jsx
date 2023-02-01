@@ -36,9 +36,13 @@ export default function MessDets() {
 
   useEffect(()=>{
     const fetchStudents = async () => {
-      const res = await axios.get(`http://localhost:8000/MessDetails`);
+      let res = await axios.get(`http://localhost:8000/MessDetails`);
+      var order = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+      res.data = res.data.sort(function(a,b) {
+        return order.indexOf( a.weekDay ) - order.indexOf( b.weekDay );
+    });
       setData(res.data);
-      console.log(res.data[0]);
+      console.log(res.data);
     }
     fetchStudents();
   },[]);

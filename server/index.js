@@ -5,7 +5,12 @@ const bcrypt = require('bcrypt');
 const bodyParser= require("body-parser");
 const cookieparser = require("cookie-parser")
 const session=require("express-session");
+const multer = require('multer');
+const path = require('path');
+const { defaultMaxListeners } = require('events');
+const cloudinary = require('cloudinary').v2;
 const saltRounds = 10;
+
 
 const PORT=process.env.PORT || 8000;
 
@@ -13,7 +18,7 @@ const app=express();
 
 
 app.use(cors({
-    origin:"http://localhost:3000",
+    origin:"http://localhost:3001",
     credentials:true,
 }));
 app.use(express.json());
@@ -34,7 +39,28 @@ const db=mysql.createConnection({
     user:'root',
     password:'Abhilash@11',
     database:'HostelManagement'
-})
+});
+
+var storage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        callBack(null, './public/images');     // './public/images/' directory name where save the file
+    },
+    filename: (req, file, callBack) => {
+        callBack(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+    }
+});
+
+var upload = multer({
+    storage: storage
+});
+
+cloudinary.config({
+    cloud_name: "daqlipjde",
+    api_key: "866243194927737",
+    api_secret: "JscJmOvHG9Pwh0wK8bzC4dr5zIk"
+});
+
+
 
 
 
@@ -192,14 +218,15 @@ app.post("/registerStudents",(req,res)=>{
             console.log(err);
         }else{
             if(result.length!=0){
-                res.send({message:"Student already exists"});
+                res.send({status:404,message:"Student already exists"});
             }else{
                 let insert = "INSERT INTO `students` SET ?";
                 db.query(insert,data,(err,result)=>{
                     if(err){
                         console.log(err);
+                        res.send({status:404,message:err});
                     }else{
-                        res.send(result);
+                        res.send({status:200,data:result,message:"Student has been registered successfully"});
                     }
                 })
             }
@@ -213,11 +240,21 @@ app.post("/registerStudents",(req,res)=>{
 //     console.log(req);
 // })
 
-app.post("/addRoom",(req,res)=>{
+app.post("/addRoom",upload.single('image'),(req,res)=>{
     const roomNo = parseInt(req.body.roomNo);
     const noOccupants = parseInt(req.body.noOccupants);
     const price = parseInt(req.body.price);
+    const img = req.body.image;
     const bookingStatus = 0;
+    // const temp = cloudinary.uploader.upload(img, {public_id: `${roomNo}`});
+
+    // temp.then((data) => {
+    //     console.log(data);
+    //     console.log(data.secure_url);
+    //   }).catch((err) => {
+    //     console.log(err);
+    //   });
+
 
     const data = {
         noOccupants:noOccupants,
@@ -226,6 +263,8 @@ app.post("/addRoom",(req,res)=>{
         price:price
     }
 
+
+    console.log(req)
     console.log(data);
 
     let sql = `select * from rooms where roomNo='${roomNo}'`
@@ -239,13 +278,14 @@ app.post("/addRoom",(req,res)=>{
                 db.query(insert,data,(err,result)=>{
                     if(err){
                         console.log(err);
+                        res.send({status:404,data:result,message:err});
                     }else{
-                        res.send(result);
+                        res.send({status:200,data:result,message:"Room has been added"});
                     }
                 })
             }else{
                 console.log("Room already exists")
-                res.send(`<script>alert("Room already exists");</script>`);
+                res.send({status:404,message:"Room already exists"});
             }
         }
     })
@@ -338,7 +378,7 @@ app.post("/bookHostel",(req,res)=>{
 
 app.get("/studentDetails",(req,res)=>{
     
-    let sql = `select s.usn, s.studentName, s.branch, s.semester, r.roomNo, h.bookingDate from students s, rooms r, hostelBooking h where r.roomNo = h.roomId and s.usn = h.usn`;
+    let sql = `select s.usn, s.studentName, s.branch, s.semester, r.roomNo, h.bookingDate from students s left outer join hostelBooking h on s.usn = h.usn left outer join rooms r on r.roomNo = h.roomId`;
     db.query(sql,(err,result)=>{
         if(err){
             console.log(err);
@@ -351,11 +391,12 @@ app.get("/studentDetails",(req,res)=>{
 app.get("/studentDetails/:name",(req,res)=>{
     let Name = req.params.name;
     //console.log(studentName);
-    let sql = `select s.usn, s.studentName, s.branch, s.semester, r.roomNo, h.bookingDate from students s, rooms r, hostelBooking h where r.roomNo = h.roomId and s.usn = h.usn and studentName = ${Name} `;
+    let sql = `select s.usn, s.studentName, s.branch, s.semester, r.roomNo, h.bookingDate from students s left outer join hostelBooking h on s.usn = h.usn left outer join rooms r on r.roomNo = h.roomId`;
     db.query(sql,(err,result)=>{
         if(err){
             console.log(err);
         }else{
+            result = result.filter((el) => `'${el.studentName}'` === Name)
             console.log(result);
             res.send(result);
         }
@@ -364,7 +405,7 @@ app.get("/studentDetails/:name",(req,res)=>{
 
 app.get("/roomDetails",(req,res)=>{
     // let sql = `select r.roomNo, r.noOccupants, r.price, r.bookingStatus from rooms r`;
-    let sql = `select h.roomId, count(h.usn) as currOccupants, r.noOccupants, r.price, r.bookingStatus from rooms r, hostelBooking h where r.roomNo = h.roomId group by h.roomId`
+    let sql = `select r.roomNo, count(h.usn) as currOccupants, r.noOccupants, r.price from rooms r left outer join hostelBooking h on r.roomNo = h.roomId  group by r.roomNo`;
     db.query(sql,(err,result)=>{
         if(err){
             console.log(err);
@@ -379,11 +420,12 @@ app.get("/roomDetails/:roomNo",(req,res)=>{
     let roomId = req.params.roomNo;
     console.log(roomId);
     //console.log(studentName);
-    let sql = `select h.roomId, count(h.usn) as currOccupants, r.noOccupants, r.price, r.bookingStatus from rooms r, hostelBooking h where r.roomNo = h.roomId and r.roomNo = ${roomId} group by h.roomId`;
+    let sql = `select r.roomNo, count(h.usn) as currOccupants, r.noOccupants, r.price from rooms r left outer join hostelBooking h on h.roomId = r.roomNo group by r.roomNo`;
     db.query(sql,(err,result)=>{
         if(err){
             console.log(err);
         }else{
+            result = result.filter((el) => el.roomNo == roomId);
             console.log(result);
             res.send(result);
         }
@@ -470,26 +512,38 @@ app.post('/updateStudent',(req,res)=>{
 
 app.post('/deleteStudent',(req,res)=>{
     const usn = req.body.usn;
-
-    let sql = `select usn from students where usn = "${usn}"`;
-    db.query(sql,(err,result)=>{
-        if(!err){
-            if(result.length != 0){
-                let Delete = `delete from students where usn = "${usn}"`;
-                db.query(Delete,(err, updateRes) => {
-                    if(!err){
-                        console.log("Success");
-                    }else{
-                        console.log(err);
-                    }
-                })
+    const flag = req.body.flag;
+    console.log(flag)
+    if(flag == '0'){
+        let sql = `select usn from students where usn = "${usn}"`;
+        db.query(sql,(err,result)=>{
+            if(!err){
+                if(result.length != 0){
+                    let Delete = `delete from students where usn = "${usn}"`;
+                    db.query(Delete,(err, updateRes) => {
+                        if(!err){
+                            console.log("Success");
+                        }else{
+                            console.log(err);
+                        }
+                    })
+                }else{
+                    console.log("Student does not exists");
+                }
             }else{
-                console.log("Room does not exists");
+                console.log(err);
             }
-        }else{
-            console.log(err);
-        }
-    })
+        });
+    }else{
+        let sql = `delete from users`;
+        db.query(sql,(err,result)=>{
+            if(!err){
+                console.log("Deleted all students successfully");
+            }else{
+                console.log(err);
+            }
+        })
+    }
     
 });
 
@@ -735,6 +789,57 @@ app.post('/deleteMess',(req,res)=>{
     })
     
 });
+
+
+app.get("/profileDetails",async (req,res)=>{
+    let sql = `select count(s.usn) as NumberOfStudentsInHostel from students s, hostelBooking h where s.usn = h.usn`;
+    let details = [];
+    db.query(sql,(err,result)=>{
+        if(!err){
+            if(result.length!=0){
+                details.push(result);
+                console.log(details);
+                let roomDetails = `select count(*) as NumberOfRooms from rooms`;
+                db.query(roomDetails,(err,result)=>{
+                    if(!err){
+                        if(result.length!=0){
+                            details.push(result);
+                            console.log(details);
+                            let bookedRooms = `select count(distinct roomId) as NumberOfRoomsBooked from hostelBooking`;
+                            db.query(bookedRooms,(err,result)=>{
+                                if(!err){
+                                    details.push(result);
+                                    console.log(details);
+                                    let messFee = `select sum(price) as MessFee from mess`;
+                                    db.query(messFee,(err,result)=>{
+                                        if(!err){
+                                            result[0].MessFee= result[0].MessFee * 43.4524 //messFee * number of weeks in 10 months
+                                            details.push(result);
+                                            console.log(details);
+                                            res.send({status:"ok",data:details});
+
+                                        }else{
+                                            console.log(err);
+                                        }
+                                    })
+                                    
+                                }else{  
+                                    console.log(err);
+                                }
+                            })
+                        }
+                    }else{
+                        console.log("Error");
+                    }
+                })
+            }
+        }else{
+            console.log(err);
+            res.send({error:err, message:"Error"});
+        }
+    })
+
+})
 
 
 

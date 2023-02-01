@@ -59,12 +59,12 @@ let handleSubmit = async (e) => {
           guardianPhno: guardianPhno
       });
       console.log(res);
-      if(res.data.messageg)
-        {
-            setMessage(res.data.message);
-        }
+      // if(res.data.messageg)
+      //   {
+      //       setMessage(res.data.message);
+      //   }
       let resJson = await res.json();
-      if (res.status === 200) {
+      if (res.data.status === 200) {
         setUSN("");
         setName("");
         setEmail("");
@@ -76,8 +76,10 @@ let handleSubmit = async (e) => {
         setGuardianName("");
         setGuardianPhno("");
         setMessage("Student created successfully");
+        alert(res.data.message);
       } else {
         setMessage("Some error occured");
+        alert(res.data.message);
       }
     } catch (err) {
       console.log(err);

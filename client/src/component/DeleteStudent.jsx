@@ -37,14 +37,17 @@ export default function DeleteStudent() {
     try{
         let res = await axios.post("http://localhost:8000/deleteStudent",{
             usn:usn,
+            flag:flag
         });
         console.log(res);
+        setFlag(0);
     }catch(err){
         console.log(err);
     }
   };
 
   const [usn, setusn] = useState(0);
+  const [flag, setFlag] = useState(0);
 
   return (
     <ThemeProvider theme={theme}>
@@ -56,7 +59,7 @@ export default function DeleteStudent() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random)',
+            backgroundImage: 'url(https://images.unsplash.com/photo-1555854877-bab0e564b8d5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1738&q=80)', 
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -96,8 +99,18 @@ export default function DeleteStudent() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                onClick ={(e)=>setFlag(0)}
               >
                 Delete
+              </Button>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick ={(e)=>setFlag(1)}
+              >
+                Delete All
               </Button>
               <Copyright sx={{ mt: 5 }} />
             </Box>

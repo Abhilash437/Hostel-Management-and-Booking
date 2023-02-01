@@ -1,31 +1,11 @@
--- phpMyAdmin SQL Dump
--- version 5.1.0
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Jun 26, 2021 at 05:46 PM
--- Server version: 10.4.19-MariaDB
--- PHP Version: 8.0.6
+
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `login_react`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
 DROP TABLE `admin`;
 
 CREATE TABLE `admin` (
@@ -35,37 +15,20 @@ CREATE TABLE `admin` (
   `date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `users`
---
+
 
 INSERT INTO `admin` (`id`, `email`, `password`, `date`) VALUES
 (1,'abhilashhathwar20@gmail.com','$2a$12$KZF2EK6kJOUo3YQUtUQAj.KNNnt4b0rz7vpdfo/gA3LRbRYl9AhmK','2023-01-07 09:51:38');
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `users`
---
 ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
 
---
--- AUTO_INCREMENT for dumped tables
---
 
---
--- AUTO_INCREMENT for table `users`
---
 ALTER TABLE `admin`
   MODIFY `id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
 
 DROP TABLE `students`;
 
@@ -79,7 +42,8 @@ CREATE TABLE `students` (
   phoneNo varchar(20) NOT NULL,
   aadhar varchar(20) NOT NULL,
   guardianName varchar(100) NOT NULL, 
-  guardianPhno varchar(20) NOT NULL
+  guardianPhno varchar(20) NOT NULL,
+  FOREIGN KEY(usn) REFERENCES users(usn) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 ALTER TABLE `students`
@@ -89,8 +53,8 @@ ALTER TABLE `students`
 DROP TABLE `rooms`;
 
 CREATE TABLE `rooms` (
-  noOccupants int NOT NULL,
   roomNo int NOT NULL,
+  noOccupants int NOT NULL,
   bookingStatus BIT DEFAULT NULL,
   price bigint NOT NULL
 );
@@ -111,7 +75,7 @@ CREATE TABLE `hostelBooking` (
 );
 
 ALTER TABLE `hostelBooking`
-  ADD PRIMARY KEY (`roomId`,`usn`);
+  ADD PRIMARY KEY (`usn`);
 
 COMMIT;
 
@@ -143,3 +107,26 @@ ALTER TABLE `mess`
   ADD PRIMARY KEY (`weekDay`);
 
 COMMIT;
+
+CREATE TABLE `users` (
+  usn varchar(20) NOT NULL,
+  pass varchar(20) NOT NULL
+);
+
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`usn`);
+
+COMMIT;
+
+DELIMITER $$
+
+CREATE TRIGGER `user_insert_students`
+AFTER INSERT ON `users`
+FOR EACH ROW
+BEGIN
+  DECLARE Userusn varchar(20);
+  SELECT usn INTO Userusn from `users` where usn = NEW.usn;
+  INSERT INTO `students` VALUES(Userusn,"new","new","new","new","new","new","new","new","new");
+END;
+$$
+DELIMITER ;
