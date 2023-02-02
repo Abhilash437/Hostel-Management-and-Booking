@@ -52,7 +52,7 @@ You will need to have the latest version of NodeJS installed, Express JS and a f
 
 ```bash
 # Clone this repository
-$ git clone https://github.com/amitmerchant1990/electron-markdownify
+$ git clone https://github.com/Abhilash437/Hostel-Management-and-Booking.git
 
 # Go into the repository
 $ cd Hostel-Management-and-Booking
