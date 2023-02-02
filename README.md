@@ -72,7 +72,7 @@ $ Enter your password: ***********
 # Create a database with the name hostelmanagement
 <mysql> CREATE DATABASE hostelmanagement;
 
-# Copy the CREATE TABLE statements from the .sql folder present in the server folder and paste it in the <mysql> terminal to create the tables
+# Copy the CREATE TABLE statements from the .sql file present in the server folder and paste it in the <mysql> terminal to create the tables
 
 # After the tables have been created you can exit the terminal
 <mysql> exit;
