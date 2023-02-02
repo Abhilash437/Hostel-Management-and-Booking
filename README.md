@@ -130,8 +130,3 @@ $ npm start
 
 [markdownify-web](https://github.com/amitmerchant1990/markdownify-web) - Web version of Markdownify -->
 
-## License
-
-MIT
-
----
