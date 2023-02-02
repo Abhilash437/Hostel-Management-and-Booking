@@ -39,7 +39,7 @@ app.use(session({
 const db=mysql.createConnection({
     host:'localhost',
     user:'root',
-    password:'Abhilash@11',
+    password:'',
     database:'HostelManagement'
 });
 

@@ -18,7 +18,7 @@ const app=express();
 
 
 app.use(cors({
-    origin:"http://localhost:3001",
+    origin:["http://localhost:3000","http://localhost:3001"],
     credentials:true,
 }));
 app.use(express.json());
@@ -37,7 +37,7 @@ app.use(session({
 const db=mysql.createConnection({
     host:'localhost',
     user:'root',
-    password:'Abhilash@11',
+    password:'',
     database:'HostelManagement'
 });
 
